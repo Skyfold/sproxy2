@@ -1,0 +1,25 @@
+sudo: false
+language: generic
+cache:
+  directories:
+  - "$HOME/.stack"
+addons:
+  apt:
+    packages:
+    - libgmp-dev
+before_install:
+- mkdir -p ~/.local/bin
+- export PATH=$HOME/.local/bin:$PATH
+- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards
+  --strip-components=1 -C ~/.local/bin '*/stack'
+install:
+- stack --no-terminal --install-ghc test --only-dependencies
+script:
+- stack --no-terminal test --haddock --no-haddock-deps --copy-bins
+deploy:
+  provider: releases
+  api_key:
+    secure: Clu6KxsIzx9L1kpZzWTGFah4CCkYtUf2L0Ve3YQGLzpttAP47FiXMel9x3qe5NEAezIGDqoHK8VCH/hQnV7ONu2YJD0td5cnBDLoH8DBGs/yqLdM5ziQE5lYNC2nijmGvp8n/NNL4TGFrXDnb1/L5fFF+d3oxpn1INEnbcE4bnB+opKRZkeang4UHHh8sDjahlnHeuIjKQGisE8WxFOYvSzv2TeWYwoc6oqDbTdVJCXncqt0yvarqxy9DFMlFDmkwKdjSArNVlnzihrXrAZpjbKJJv/XApp2ZmxBu3Z/16BQJ462sCErvUSEnJ+rpNYb7Ymxs3nOD6ZeXTIS6cTjP0UzXtxivjiFw8Difb6QAS7IEA+KsNHm2+39spSICJMcFsriKLwipQY3eefAkUUVfBchjhY/+N+QuyAxOdbGS3UyVPy82VX6/kQxVvQ0ZD9S4cV5amzIxIHHSzYTui+nkLYaqtIWVvQuUW8n8wGDu073dtwt88AbfOjwnm8+6+dODyhyMJ6RnIHxbTWYUj4C6qZwNtCsmzQjbXCIQMqrSCON4NX3fwNx80HO8nYU8UPuNIBMPakdwPKn8pUq4g+C+luB8yn4ADP1cnDEljYAi8vJCLWO19vahcI99PbujIKn6tulDPhnIn/ucbC9TiYjfOAWEOo9M7jLzjSGMj8KeMo=
+  file: "~/.local/bin/sproxy2"
+  on:
+    repo: Skyfold/sproxy2
